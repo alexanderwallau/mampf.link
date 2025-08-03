@@ -8,6 +8,8 @@ var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentCla
 
 try
 {
+    //Port 8080 clashes with to many things and I'm to lazy at the moment to make this propper
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "9630";
     var builder = WebApplication.CreateBuilder(args);
 
     // NLog: Setup NLog for Dependency injection
@@ -21,6 +23,8 @@ try
     builder.Services.AddScoped<IGroupService, GroupService>();
     builder.Services.AddScoped<IAdminService, GroupAdminService>();
     builder.Services.AddSingleton<IGroupAutoreloadService, GroupAutoreloadService>();
+
+    builder.WebHost.UseUrls($"http://*:{port}");
 
     var app = builder.Build();
 
